@@ -89,6 +89,28 @@ function App() {
 
   const onCheckedChange = e =>{
     const {name, checked} = e.target
+
+    Yup
+      .reach(formSchema, name)
+      //we can then run validate using the value
+      .validate(checked)
+      // if the validation is successful, we can clear the error message
+      .then(valid => {
+        setErrors({
+          ...errors,
+          [name]: ""
+        });
+      })
+      /* if the validation is unsuccessful, we can set the error message to the message 
+        returned from yup (that we created in our schema) */
+      .catch(err => {
+        setErrors({
+          ...errors,
+          [name]: err.errors[0]
+        });
+      });
+
+
     setFormValues({
       ...formValues,
       [name]:checked
